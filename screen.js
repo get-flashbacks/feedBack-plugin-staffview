@@ -872,11 +872,13 @@ function _playerSlot() {
 
 function _buildWsUrl(filename, arrIdx) {
     // filename may already be URI-encoded from the data-play attribute;
-    // decode first then re-encode cleanly, same as tabview.
+    // decode first then re-encode cleanly so a filename containing '&',
+    // '#', or '?' can't inject/override the arrangement query param or
+    // truncate the path at a '#' fragment.
     let decoded = filename;
     try { decoded = decodeURIComponent(filename); } catch (_) {}
     const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
-    return proto + '//' + location.host + '/ws/highway/' + decoded
+    return proto + '//' + location.host + '/ws/highway/' + encodeURIComponent(decoded)
         + '?arrangement=' + arrIdx;
 }
 
