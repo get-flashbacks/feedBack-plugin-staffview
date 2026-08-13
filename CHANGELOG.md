@@ -43,6 +43,17 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - **Final beat of a song is now reachable** — `_svSyncCursor`'s binary search
   capped `hi` at `beats.length - 2`, making the last beat unreachable by the
   search; it's now `beats.length - 1`.
+- **One staff-system row of lookahead stays visible** — `_svUpdateMarker`'s
+  auto-scroll only fired once the cursor reached within `padY` of the viewport
+  bottom and then jumped to centre it, so the next row was invisible until the
+  last note of the current one had played. It now locates the next staff
+  system and, if that system's bottom is off-screen, scrolls so the current row
+  sits ~25% from the top, leaving the next row visible in the remaining 75%.
+  Adds a backward-seek guard (marker inside the top 15% scrolls up to a 15%
+  inset, covering seek-to-beginning) and keeps the original centre behaviour as
+  the last-row fallback. Page layout only — horizontal layout has no scrolling
+  Y axis. Study mode scrolls identically, since `_svStudySnapCursor` drives the
+  same function. Covered by `tests/scroll.test.js`.
 - **Filename is percent-encoded in `_buildWsUrl`** — the docstring claimed the
   filename was decoded and then re-encoded "same as tabview", but the code only
   decoded it before splicing the result into the `ws(s)://…/ws/highway/<name>`
