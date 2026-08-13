@@ -8,6 +8,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+---
+
+## [0.4.0] — 2026-08-13
+
 ### Added
 
 - **Metronome** — a `METRONOME` toggle in the options pill clicks on every
@@ -39,6 +43,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - **Final beat of a song is now reachable** — `_svSyncCursor`'s binary search
   capped `hi` at `beats.length - 2`, making the last beat unreachable by the
   search; it's now `beats.length - 1`.
+- **Filename is percent-encoded in `_buildWsUrl`** — the docstring claimed the
+  filename was decoded and then re-encoded "same as tabview", but the code only
+  decoded it before splicing the result into the `ws(s)://…/ws/highway/<name>`
+  URL. A filename containing `&`, `#`, or `?` went in unescaped, so it could
+  override the `arrangement` query parameter or truncate the path at a fragment.
+  Filenames come from the app's own library data attributes rather than being
+  directly attacker-supplied here, and the socket stays same-origin, so this was
+  a robustness bug rather than a demonstrated exploit. Now wrapped in
+  `encodeURIComponent`, matching what the comment already claimed. Covered by
+  `tests/ws_url.test.js`.
 
 ---
 
