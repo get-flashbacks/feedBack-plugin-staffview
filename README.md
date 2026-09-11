@@ -30,7 +30,7 @@ Renders any arrangement that carries notation data in the `.sloppak` chart forma
 
 Staffview reaches into two other plugins' globals directly (no manifest-level enforcement exists for this — see [feedback-plugin-splitscreen#47](https://github.com/get-flashbacks/feedback-plugin-splitscreen/issues/47) for the rationale behind this approach). Both are feature-detected and degrade gracefully when absent or on an older version:
 
-- **`feedback-plugin-notedetect`** (`window.createNoteDetector`) — verified present as of notedetect **v1.32.0**. Used for the MIDI note-on/off scoring judgment reported through the note-detection domain.
+- **`feedback-plugin-notedetect`** (`window.createNoteDetector`) — verified present as of notedetect **v1.32.0**. Used to suppress the generic `note_detect` plugin's default singleton while staffview's own MIDI note-on/off judgment reports through the note-detection domain.
 - **`feedback-plugin-splitscreen`** (`window.feedBackSplitscreen` / `window.slopsmithSplitscreen`) — verified present as of splitscreen **v1.14.5**. Used to detect per-panel focus so MIDI/scoring routes to the active panel in a splitscreen layout.
 
 Neither is a hard requirement — staffview works standalone (main player, single-instance) without either installed.
